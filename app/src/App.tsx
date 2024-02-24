@@ -1,19 +1,22 @@
 import { Plus } from 'lucide-react'
+import { Header } from './components/header'
+import { Tabs } from './components/tabs'
+import { Button } from './components/ui/button'
 
 export function App() {
   return (
     <div className="py-10 space-y-8">
       <div>
-        header 
-        tabs
+        <Header></Header>
+        <Tabs></Tabs>
       </div>
-      <main className="max-w-6xl space-y-5 nx-auto">
+      <main className="max-w-6xl space-y-5 mx-auto">
         <div className='flex items-center gap-3'>
           <h1 className="text-xl font-bold">Tags</h1>
-          <button className='inline-flex items-center gap-1.5 text-xs bg-teal-300 text-teal-950 font-medium rounded-full px-1.5 py-1'>
+          <Button variant='primary'>
             <Plus className='size-3'></Plus>
             Create new
-          </button>
+          </Button>
         </div>
       </main>
   </div>  
