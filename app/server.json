@@ -1,12 +1,12 @@
 {
   "tags": [
     {
-      "title": "Redis",
+      "title": "Rails",
       "slug": "old",
-      "amountOfVideos": 113
+      "amountOfVideos": 9
     },
     {
-      "title": "Angular",
+      "title": "jQuery",
       "slug": "old",
       "amountOfVideos": 57
     },

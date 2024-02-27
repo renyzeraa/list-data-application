@@ -1,11 +1,13 @@
-import { Plus, Search, FileDown, MoreHorizontal } from 'lucide-react'
+import { Plus, Search, FileDown, MoreHorizontal, Filter } from 'lucide-react'
 import { Header } from './components/header'
 import { Tabs } from './components/tabs'
 import { Button } from './components/ui/button'
 import { Control, Input } from './components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table'
 import { Pagination } from './components/pagination'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
 
 export interface TagResponse{
   first: number
@@ -26,21 +28,37 @@ export interface Tag {
 
 
 export function App() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const urlFilter = searchParams.get('filter') ?? ''
+  
+  const [filter, setFilter] = useState(urlFilter);
+
+  const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
 
   const { data: tagsResponse, isLoading } = useQuery<TagResponse>({
-    queryKey: ['get-tags'],
+    queryKey: ['get-tags', urlFilter, page] /* cria um id no cache do navegador,se for o mesmo id nao precisa recarregar os dados */,
     queryFn: async () => {
-       const response = await fetch('http://localhost:3333/tags?_page=1&_per_page=10')
+       const response = await fetch(`http://localhost:3333/tags?_page=${page}&_per_page=10&title=${urlFilter}`)
        const data = await response.json()
-       console.log(data)
        return data
-    }
+    },
+    placeholderData: keepPreviousData /* evita de piscar a tela*/,
+    staleTime: 1000 * 60 /* ele recarrega em 1 minuto */,
   })
+  
+  function handleFilter() {
+    setSearchParams((params) => {
+      params.set('page', '1');
+      params.set('filter', filter);
+      
+      return params;
+    });
+  }
 
   if (isLoading) {
     return null
   }
-
+  
   return (
     <div className="py-10 space-y-8">
       <div>
@@ -56,15 +74,26 @@ export function App() {
           </Button>
         </div>
         <div className='flex items-center justify-between'>
-          <Input variant='filter'>
-            <Search className='size-3'/>
-            <Control placeholder='Search tags...'/>
-          </Input>
+          <div className='flex items-center justify-between gap-2'>
+            <Input variant='filter'>
+              <Search className='size-3'/>
+              <Control 
+                placeholder='Search tags...' 
+                onChange={(e): void => setFilter(e.target.value)}
+                value={filter}
+              />
+            </Input>
+            <Button onClick={handleFilter}>
+              <Filter className='size-3'/>
+              Fitler
+            </Button>
+          </div>
           <Button>
             <FileDown className='size-3'/>
             Export
           </Button>
         </div>
+        
         <Table>
           <TableHeader>
             <TableRow>
@@ -104,7 +133,7 @@ export function App() {
         <Pagination 
           pages={tagsResponse.pages} 
           items={tagsResponse.items} 
-          page={1}/>
+          page={page}/>
         }
       </main>
   </div>  
