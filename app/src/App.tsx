@@ -26,7 +26,6 @@ export interface Tag {
   id: string
 }
 
-
 export function App() {
   const [searchParams, setSearchParams] = useSearchParams()
   const urlFilter = searchParams.get('filter') ?? ''
