@@ -4,7 +4,7 @@ import { Tabs } from './components/tabs'
 import { Button } from './components/ui/button'
 import { Control, Input } from './components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table'
-// import { Pagination } from './components/pagination'
+import { Pagination } from './components/pagination'
 import { useQuery } from '@tanstack/react-query'
 
 export interface TagResponse{
@@ -100,7 +100,12 @@ export function App() {
             }
           </TableBody>
         </Table>
-        {/* <Pagination/> */}
+        {tagsResponse && 
+        <Pagination 
+          pages={tagsResponse.pages} 
+          items={tagsResponse.items} 
+          page={1}/>
+        }
       </main>
   </div>  
   )
