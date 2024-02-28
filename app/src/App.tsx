@@ -8,6 +8,8 @@ import { Pagination } from './components/pagination'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { useState } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { CreateTagForm } from './components/create-tag-form'
 
 export interface TagResponse{
   first: number
@@ -67,10 +69,33 @@ export function App() {
       <main className="max-w-6xl space-y-5 mx-auto">
         <div className='flex items-center gap-3'>
           <h1 className="text-xl font-bold">Tags</h1>
-          <Button variant='primary'>
-            <Plus className='size-3'></Plus>
-            Create new
-          </Button>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <Button variant='primary'>
+                <Plus className='size-3'></Plus>
+                Create new
+              </Button>
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              <Dialog.Overlay className='fixed inset-0 bg-black/70'>
+                <Dialog.Content className='fixed right-0 bottom-0 top-0 h-screen min-w-[320px] bg-zinc-950 border-l border-l-zinc-900 p-10 space-y-10'>
+                  <div className='space-y-3'>
+                    <Dialog.Title className='text-xl font-bold text-zinc-50 m-'>
+                      Create tag
+                    </Dialog.Title>
+                    <Dialog.Description className='text-zinc-500 text-sm'>
+                      Tags can be used to group videos about similar concepts
+                    </Dialog.Description>
+                    <Dialog.Close></Dialog.Close>
+                  </div>
+                  <CreateTagForm>
+
+                  </CreateTagForm>
+                </Dialog.Content>
+              </Dialog.Overlay>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
         <div className='flex items-center justify-between'>
           <div className='flex items-center justify-between gap-2'>
@@ -84,7 +109,7 @@ export function App() {
             </Input>
             <Button onClick={handleFilter}>
               <Filter className='size-3'/>
-              Fitler
+              Apply Filter
             </Button>
           </div>
           <Button>
@@ -104,25 +129,25 @@ export function App() {
           </TableHeader>
           <TableBody>
             {
-              tagsResponse?.data.map((tag) => {
+              tagsResponse?.data.map((tag, i) => {
                   return (
-                    <TableRow key={tag.id}>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <div className='flex flex-col gap-0.5'>
-                        <span className='font-medium'>{tag.title}</span>
-                        <span className='text-xs text-zinc'>{tag.id}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className='text-zinc-300'>
-                      {tag.amountOfVideos} video(s)
-                    </TableCell>
-                    <TableCell className='text-right'>
-                      <Button size='icon'>
-                        <MoreHorizontal className='size-4'/>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                    <TableRow key={i}>
+                      <TableCell></TableCell>
+                      <TableCell>
+                        <div className='flex flex-col gap-0.5'>
+                          <span className='font-medium'>{tag.title}</span>
+                          <span className='text-xs text-zinc'>{tag.id}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className='text-zinc-300'>
+                        {tag.amountOfVideos} video(s)
+                      </TableCell>
+                      <TableCell className='text-right'>
+                        <Button size='icon'>
+                          <MoreHorizontal className='size-4'/>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   )
                 })
             }
