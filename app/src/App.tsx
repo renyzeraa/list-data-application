@@ -1,6 +1,6 @@
 import { Plus, Search, FileDown, MoreHorizontal, Filter } from 'lucide-react'
-import { Header } from './components/header'
-import { Tabs } from './components/tabs'
+// import { Header } from './components/header'
+// import { Tabs } from './components/tabs'
 import { Button } from './components/ui/button'
 import { Control, Input } from './components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table'
@@ -61,10 +61,14 @@ export function App() {
   }
 
   return (
-    <div className="py-10 space-y-8">
+    <div className="py-10">
       <div>
-        <Header></Header>
-        <Tabs></Tabs>
+        {
+          /* quando utilizar setar space-y-8 na classe da div pai
+            <Header></Header> 
+            <Tabs></Tabs> 
+           */
+        }
       </div>
       <main className="max-w-6xl space-y-5 mx-auto">
         <div className='flex items-center gap-3'>
